@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: advertisement
+spec:
+  hard:
+    requests.cpu: "200m"
+    requests.memory: 2000Mi
+    limits.cpu: "200m"
+    limits.memory: 4000Mi
