@@ -1,4 +1,6 @@
 ## shim
+```AsyncRMCallback``` implement the ```ResourceManagerCallback``` interface
+
 ## interface
 ``` go
 // api
@@ -55,3 +57,21 @@ type ResourceManagerCallback interface {
 ```
 
 ## core
+* ```RMProxy``` implement the ```SchedulerAPI``` interface
+RMProxy:
+```go
+type RMProxy struct {
+	EventHandlers handler.EventHandlers
+
+	// Internal fields
+	pendingRMEvents chan interface{}
+
+	rmIDToCallback map[string]api.ResourceManagerCallback
+
+	// config version is tracked per RM,
+	// it is used to determine if configs need to be reloaded
+	rmIDToConfigWatcher map[string]*configs.ConfigWatcher
+
+	sync.RWMutex
+}
+```
