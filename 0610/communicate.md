@@ -1,5 +1,5 @@
 ## shim
-```AsyncRMCallback``` implement the ```ResourceManagerCallback``` interface
+[```AsyncRMCallback```](https://github.com/apache/yunikorn-k8shim/blob/master/pkg/callback/scheduler_callback.go#L34) implement the ```ResourceManagerCallback``` interface
 
 ## interface
 ``` go
@@ -57,7 +57,7 @@ type ResourceManagerCallback interface {
 ```
 
 ## core
-* ```RMProxy``` implement the ```SchedulerAPI``` interface
+* [```RMProxy```](https://github.com/apache/yunikorn-core/blob/master/pkg/rmproxy/rmproxy.go#L42) implement the ```SchedulerAPI``` interface
 RMProxy:
 ```go
 type RMProxy struct {
