@@ -38,7 +38,7 @@ type KubernetesShim struct {
 	context              *cache.Context
 	appManager           *appmgmt.AppManagementService
 	phManager            *cache.PlaceholderManager
-	callback             api.ResourceManagerCallback // implement 
+	callback             api.ResourceManagerCallback // implement ResourceManagerCallback
 	stateMachine         *fsm.FSM
 	stopChan             chan struct{}
 	lock                 *sync.RWMutex
