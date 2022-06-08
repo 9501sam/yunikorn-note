@@ -46,9 +46,13 @@ type KubernetesShim struct {
 }
 ```
 
-### about ```AsyncRMCallback```
+### logs about ```AsyncRMCallback```
 
 ```
-2022-05-31T09:03:23.315Z	INFO	callback/scheduler_callback.go:114	Accepting app	{"appID": "nginx_2019_01_22_00001"}
+505 2022-06-03T09:54:34.527Z    DEBUG   rmproxy/rmproxy.go:64   enqueue event   {"eventType": "*rmevent.RMApplicationUpdateEvent", "event": {"RmID":"mycluster","AcceptedApplications":[{"applicationID":"nginx_2019_01_22_00001"}],"RejectedAp    plications":[],"UpdatedApplications":null}, "currentQueueSize": 0}
+506 2022-06-03T09:54:34.527Z    DEBUG   callback/scheduler_callback.go:104  UpdateApplication callback received {"UpdateApplicationResponse": "accepted:<applicationID:\"nginx_2019_01_22_00001\" > "}
+507 2022-06-03T09:54:34.527Z    DEBUG   callback/scheduler_callback.go:110  callback: response to accepted application  {"appID": "nginx_2019_01_22_00001"}
+508 2022-06-03T09:54:34.527Z    INFO    callback/scheduler_callback.go:114  Accepting app   {"appID": "nginx_2019_01_22_00001"}
+509 2022-06-03T09:54:34.527Z    DEBUG   cache/application.go:734    shim app state transition   {"app": "nginx_2019_01_22_00001", "source": "Submitted", "destination": "Accepted", "event": "AcceptApplication"}
 ```
 
