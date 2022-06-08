@@ -38,10 +38,17 @@ type KubernetesShim struct {
 	context              *cache.Context
 	appManager           *appmgmt.AppManagementService
 	phManager            *cache.PlaceholderManager
-	callback             api.ResourceManagerCallback // implement ResourceManagerCallback
+	callback             api.ResourceManagerCallback // AsyncRMCallback: implement ResourceManagerCallback
 	stateMachine         *fsm.FSM
 	stopChan             chan struct{}
 	lock                 *sync.RWMutex
 	outstandingAppsFound bool
 }
 ```
+
+### about ```AsyncRMCallback```
+
+```
+2022-05-31T09:03:23.315Z	INFO	callback/scheduler_callback.go:114	Accepting app	{"appID": "nginx_2019_01_22_00001"}
+```
+
