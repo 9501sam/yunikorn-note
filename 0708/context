@@ -1,0 +1,76 @@
+func (cc *ClusterContext) processAsks(request *si.AllocationRequest) {
+	// by turtlegod
+	log.Logger().Info("enter processAsks()")
+	log.Logger().Info(fmt.Sprintf("%+v\n", request))
+
+	// Send rejects back to RM
+	rejectedAsks := make([]*si.RejectedAllocationAsk, 0)
+
+	// Send to scheduler
+	for _, siAsk := range request.Asks {
+		// try to get ApplicationInfo
+		partition := cc.GetPartition(siAsk.PartitionName)
+		if partition == nil {
+			msg := fmt.Sprintf("Failed to find partition %s, for application %s and allocation %s", siAsk.PartitionName, siAsk.ApplicationID, siAsk.AllocationKey)
+			log.Logger().Error("Invalid ask add requested by shim, partition not found",
+				zap.String("partition", siAsk.PartitionName),
+				zap.String("applicationID", siAsk.ApplicationID),
+				zap.String("askKey", siAsk.AllocationKey))
+			rejectedAsks = append(rejectedAsks, &si.RejectedAllocationAsk{
+				AllocationKey: siAsk.AllocationKey,
+				ApplicationID: siAsk.ApplicationID,
+				Reason:        msg,
+			})
+			continue
+		}
+
+		// by turtlegod
+		// siAsk is a si.AllocationAsk
+		// print siAsk.Tags
+		log.Logger().Info(fmt.Sprintf("%+v\n", siAsk.Tags))
+		bs, _ := json.Marshal(siAsk.Tags)
+		bsString := string(bs)
+		log.Logger().Info(bsString)
+
+		// get resources
+		allNode := partition.nodes.GetNodes()
+		for _, n := range allNode {
+			res := n.GetAvailableResource()
+			log.Logger().Info(fmt.Sprintf("%s\n", n.NodeID))
+			log.Logger().Info(fmt.Sprintf("%+v\n", res))
+		}
+
+		// set resources amount
+		for _, quantity := range siAsk.ResourceAsk.Resources {
+			result := quantity
+			result.Value = result.Value * 2
+		}
+
+		// by turtlegod
+		// TODO determinate node to lab5 by adding label to siAsk(si.AllocationAsk) !!!
+		siAsk.Tags["node"] = "lab5"
+
+		// try adding to app
+		if err := partition.addAllocationAsk(siAsk); err != nil {
+			rejectedAsks = append(rejectedAsks,
+				&si.RejectedAllocationAsk{
+					AllocationKey: siAsk.AllocationKey,
+					ApplicationID: siAsk.ApplicationID,
+					Reason:        err.Error(),
+				})
+			log.Logger().Error("Invalid ask add requested by shim",
+				zap.String("partition", siAsk.PartitionName),
+				zap.String("applicationID", siAsk.ApplicationID),
+				zap.String("askKey", siAsk.AllocationKey),
+				zap.Error(err))
+		}
+	}
+
+	// Reject asks returned to RM Proxy for the apps and partitions not found
+	if len(rejectedAsks) > 0 {
+		cc.rmEventHandler.HandleEvent(&rmevent.RMRejectedAllocationAskEvent{
+			RmID:                   request.RmID,
+			RejectedAllocationAsks: rejectedAsks,
+		})
+	}
+}
