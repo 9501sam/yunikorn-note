@@ -12,10 +12,10 @@ lab3   Ready    <none>                 80d   v1.23.1
 ```
 
 ## 方法一：使用 minikube
-只有一台主機時，會建議使用的方法，但我們之後用的都是方法二，老實說我也不太記得怎麼裝了
-印象中是按照[https://minikube.sigs.k8s.io/docs/start://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start://minikube.sigs.k8s.io/docs/start/)
-並且也有印象[drivers page](https://minikube.sigs.k8s.io/docs/drivers/) 那個連結有點重要
-使用 minikube 時，yunikorn 的圖形化介面可能會跑不出來
+只有一台主機時，會建議使用的方法，但我們之後用的都是方法二，老實說我也不太記得怎麼裝了  
+印象中是按照[https://minikube.sigs.k8s.io/docs/start://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start://minikube.sigs.k8s.io/docs/start/)  
+並且也有印象 [drivers page](https://minikube.sigs.k8s.io/docs/drivers/) 那個連結有點重要  
+使用 minikube 時，yunikorn 的圖形化介面可能會跑不出來  
 
 ## 方法二：使用實體電腦
 這個方法需要有兩台以上的實體電腦
@@ -30,7 +30,7 @@ lab3   Ready    <none>                 80d   v1.23.1
   * 按照 **Installing kubeadm, kubelet and kubectl** 下載
 * 文章中的**初始化Control Plane**
   * 使用 Calico CNI: 注意 ```/16``` 要改成 ```/24``` 才行(可能是因為是在使用實驗室的內部網路，但我也不是很確定原因)
-  ```
+```
 sudo kubeadm init --pod-network-cidr=120.108.204.0/24 --apiserver-advertise-address=120.108.204.xx
-  ```
+```
   * Flannel CNI 可能要問學長
